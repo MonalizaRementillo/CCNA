@@ -1,5 +1,5 @@
 @VSC:
-Config1.json
+@New file;Config1.json
 {
     "device":{
         "host":"192.168.102.5",
@@ -14,7 +14,21 @@ Config1.json
     },
     "new_hostname":"APP1py"
 }
-
+@Newfile;Config1a.json
+{
+    "device" : {
+        "host" : "192.168.102.5",
+        "username" : "admin",
+        "password" : "pass",
+        "device_type" : "cisco_ios"
+    }, 
+    "interface_config1" : {
+        "interface" : "loopback1",
+        "new_ip" : "1.1.1.1",
+        "subnet_mask" : "255.255.255.255"
+    },
+    "new_hostname" : "APP1py"
+}
 @Newfile; pynet1.py
 import netmiko
 from netmiko import ConnectHandler
