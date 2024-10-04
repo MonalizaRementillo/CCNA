@@ -1,0 +1,141 @@
+@Vmware put an ip address:
+enable 
+conf t
+int gi 1
+ip add 192.168.108.5 255.255.255.0
+no shut
+int gi 2
+ip add 192.168.102.5 255.255.255.0
+no shut
+int gi 3
+ip add 192.168.103.5 255.255.255.0
+no shut
+end 
+-----------------------------------
+
+TASKS 1: Learn create custom flows:
+Conf t
+	flow record CUSTOM-ENCORFLOW
+	description NETFLOWnaGAWAKOmagIsa
+	match ipv4 destination address
+	match transport destination-port
+	collect counter bytes
+	collect counter packets
+
+TEST 2: SEND flow records to windows COllector:
+	mag sumbong sa windows:
+Conf t
+	flow exporter MyFlowExporter
+	destination 192.168.108.2
+	transport udp 2055
+	export-protocol netflow-v9
+
+TASK 3: MAKE ROUTER VERY BUSY:
+1.NETWORK TIME PROTOCOL:
+Conf t
+ip route 0.0.0.0 0.0.0.0 192.168.108.2
+do ping 1.1.1.1
+ntp server 216.239.35.12
+end
+
+
+TASK 4: Python for Network Engineers:
+GitHub Copilot
+autoDocstring - Python Docstring
+Python Snippets
+AREPL for python
+Better Comments
+Python Docstring Generator
+Python Indent
+Python Test Explorer
+-------------------------------------
+@vsc
+py -m pip install --upgrade pip
+
+py -m pip install netmiko
+--------------------------------------
+
+ip route 0.0.0.0 0.0.0.0 192.168.108.2
+do ping 1.1.1.1
+--------------------------------------
+TASK 5: REAL WORLD CCNP HSRP:
+	1.1.1.1/8.8.8.8
+GI 1: 108.5				GI 1: 108.6
+APPS1 					APPS2
+GI2:102.5				G12:102.6
+		HSRIP: 102.7
+GI3:103.5 				G13:103.6
+		HSRIP: 103.7		
+	use standby 3 and track 3
+
+
+APPS1:PrimaryInt:
+conf t
+Track 2 Int gi 1 line-protocol
+Int gi 2
+standby version 2 
+standby 2 ip 192.168.102.7
+standby 2 preempt
+standby 2 Priority 150
+standby 2 track 2 decrement 60
+end
+
+
+APPS2:BACKUP:
+conf t
+Int gi 2
+standby version 2
+standby 2 ip 192.168.102.7
+standby 2 preempt
+standby 2 Priority 100
+end
+-------------------------------------------------------
+TASK 6: Configure Real Ip SLA: Service Level Agreement:
+@APP1:
+conf t
+no ip sla 4
+ip sla 4
+   icmp-echo 8.8.8.8
+   freq 5
+   exit
+ip sla schedule 4 life forever start-time now
+track 4 ip sla 4
+  delay down 10 up 5
+  exit
+Int gi 2
+No standby 2 track 4 decrement 60
+---------------------------------------------------------
+APPS1:PrimaryInt:
+conf t
+Track 2 Int gi 1 line-protocol
+Int gi 3
+standby version 2 
+standby 3 ip 192.168.103.7
+standby 3 preempt
+standby 3 Priority 150
+standby 3 track 3 decrement 60
+end
+
+APPS2:BACKUP:
+conf t
+Int gi 3
+standby version 2
+standby 3 ip 192.168.103.7
+standby 3 preempt
+standby 3 Priority 100
+end
+
+
+Example 2:
+conf t
+no ip sla 3
+ip sla 3
+   icmp-echo 8.8.8.8
+   freq 5
+   exit
+ip sla schedule 4 life forever start-time now
+track 3 ip sla 3
+  delay down 10 up 5
+  exit
+Int gi 2
+No standby 2 track 3 decrement 60
