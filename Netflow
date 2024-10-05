@@ -2,7 +2,7 @@
 @New file;Config1.json
 {
     "device":{
-        "host":"192.168.102.5",
+        "host":"192.168.108.5",
         "username":"admin",
         "password":"pass",
         "device_type":"cisco_ios"
@@ -17,7 +17,7 @@
 @Newfile;Config1a.json
 {
     "device" : {
-        "host" : "192.168.102.5",
+        "host" : "192.168.108.5",
         "username" : "admin",
         "password" : "pass",
         "device_type" : "cisco_ios"
@@ -34,7 +34,7 @@ import netmiko
 from netmiko import ConnectHandler
 sshCli = ConnectHandler(
     device_type = 'cisco_ios',
-    host ='192.168.102.5',
+    host ='192.168.108.5',
     port = 22,
     username = 'admin',
     password = 'pass'  
